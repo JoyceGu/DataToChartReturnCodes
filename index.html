@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data to Chart</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Welcome to Data to Chart</h1>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <h2>Home</h2>
+            <div class="table-container">
+                <div class="table-controls">
+                    <button id="addColumn">Add Column</button>
+                    <button id="removeColumn">Remove Column</button>
+                    <span class="column-counter">Columns: <span id="columnCount">3</span>/10</span>
+                </div>
+                <div class="table-info">
+                    <p>Double click on any cell to edit. Press Enter to save, Esc to cancel.</p>
+                </div>
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th class="editable" title="Double click to edit">Column 1</th>
+                            <th class="editable" title="Double click to edit">Column 2</th>
+                            <th class="editable" title="Double click to edit">Column 3</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="chart-controls">
+                <button id="recommendChart" class="chart-btn">
+                    <i class="fas fa-magic"></i>
+                    Recommend a Chart
+                </button>
+                <button id="pickChart" class="chart-btn">
+                    <i class="fas fa-chart-bar"></i>
+                    Pick a Chart
+                </button>
+            </div>
+            <div id="chartArea" class="chart-area" style="display: none;">
+                <h3 id="chartTitle" class="chart-title"></h3>
+                <div id="chartContainer">
+                    <canvas id="myChart"></canvas>
+                </div>
+                <div id="pythonCode" class="python-code">
+                    <div class="code-header">
+                        <h4>Python Code:</h4>
+                        <button id="copyCode" class="copy-btn">
+                            <i class="fas fa-copy"></i> Copy Code
+                        </button>
+                    </div>
+                    <pre><code id="codeBlock"></code></pre>
+                </div>
+            </div>
+            <div id="chartPicker" class="chart-picker" style="display: none;">
+                <h3>Select a Chart Type</h3>
+                <div class="chart-grid">
+                    <div class="chart-option" data-type="line">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Line Chart</span>
+                    </div>
+                    <div class="chart-option" data-type="bar">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Bar Chart</span>
+                    </div>
+                    <div class="chart-option" data-type="scatter">
+                        <i class="fas fa-braille"></i>
+                        <span>Scatter Plot</span>
+                    </div>
+                    <div class="chart-option" data-type="pie">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>Pie Chart</span>
+                    </div>
+                    <div class="chart-option" data-type="histogram">
+                        <i class="fas fa-bars"></i>
+                        <span>Histogram</span>
+                    </div>
+                    <div class="chart-option" data-type="box">
+                        <i class="fas fa-box-open"></i>
+                        <span>Box Plot</span>
+                    </div>
+                </div>
+            </div>
+            <div id="demoSelector" class="demo-selector" style="display: none;">
+                <h3>Select Demo Dataset</h3>
+                <div class="demo-options">
+                    <div class="demo-option" data-demo="sales">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Sales Data</span>
+                        <small>Monthly sales performance</small>
+                    </div>
+                    <div class="demo-option" data-demo="population">
+                        <i class="fas fa-users"></i>
+                        <span>Population Stats</span>
+                        <small>Age distribution data</small>
+                    </div>
+                    <div class="demo-option" data-demo="weather">
+                        <i class="fas fa-cloud-sun"></i>
+                        <span>Weather Data</span>
+                        <small>Temperature vs Rainfall</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 DataToChart. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
