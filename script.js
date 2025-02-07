@@ -572,7 +572,7 @@ function createChartConfig(chartType, data) {
         maintainAspectRatio: false,
         plugins: {
             annotation: {
-                annotations: {}  // 初始化空的注释对象
+                annotations: {}
             }
         }
     };
@@ -711,36 +711,80 @@ function createChartConfig(chartType, data) {
             };
             
         case 'line':
-            return {
-                type: 'line',
-                data: {
-                    labels: values.map(row => row[0]),
-                    datasets: [{
-                        label: headers[1],
-                        data: values.map(row => parseFloat(row[1])),
-                        borderColor: currentPalette.getColor(0),
-                        backgroundColor: currentPalette.getColorWithOpacity(0, 0.2),
+            // 检查是否有三列数据
+            if (headers.length === 3) {
+                // 获取唯一的分类值
+                const categories = [...new Set(values.map(row => row[2]))];
+                
+                // 为每个分类创建一个数据集
+                const datasets = categories.map((category, index) => {
+                    const filteredData = values.filter(row => row[2] === category);
+                    return {
+                        label: category,
+                        data: filteredData.map(row => parseFloat(row[1])),
+                        borderColor: currentPalette.getColor(index),
+                        backgroundColor: currentPalette.getColorWithOpacity(index, 0.2),
                         fill: true
-                    }]
-                },
-                options: {
-                    ...baseOptions,
-                    scales: {
-                        x: {
-                            title: {
-                                display: true,
-                                text: headers[0]
-                            }
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: headers[1]
+                    };
+                });
+
+                return {
+                    type: 'line',
+                    data: {
+                        labels: [...new Set(values.map(row => row[0]))], // 使用唯一的 x 轴值
+                        datasets: datasets
+                    },
+                    options: {
+                        ...baseOptions,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: headers[0]
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: headers[1]
+                                }
                             }
                         }
                     }
-                }
-            };
+                };
+            } else {
+                // 原有的双列折线图逻辑
+                return {
+                    type: 'line',
+                    data: {
+                        labels: values.map(row => row[0]),
+                        datasets: [{
+                            label: headers[1],
+                            data: values.map(row => parseFloat(row[1])),
+                            borderColor: currentPalette.getColor(0),
+                            backgroundColor: currentPalette.getColorWithOpacity(0, 0.2),
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        ...baseOptions,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: headers[0]
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: headers[1]
+                                }
+                            }
+                        }
+                    }
+                };
+            }
             
         case 'box':
             const boxplotData = calculateBoxPlotData(values.map(row => parseFloat(row[0])));
@@ -848,28 +892,19 @@ function generatePythonCode(chartType, data) {
     code += '# Create figure and axis\n';
     code += 'fig, ax = plt.subplots(figsize=(10, 6))\n\n';
     
-    // 根据图表类型生成代码
-    switch (chartType) {
-        case 'scatter':
-            code += '# Create scatter plot\n';
-            code += `sns.scatterplot(data=df, x='${headers[0]}', y='${headers[1]}', color='${currentPalette.getColor(0)}')\n`;
-            break;
-            
-        case 'bar':
-            code += '# Create bar plot\n';
-            code += `sns.barplot(data=df, x='${headers[0]}', y='${headers[1]}', palette=colors)\n`;
-            break;
-            
-        case 'line':
-            code += '# Create line plot\n';
-            code += `ax.plot(df['${headers[0]}'], df['${headers[1]}'], color='${currentPalette.getColor(0)}', linewidth=2)\n`;
-            code += `ax.fill_between(df['${headers[0]}'], df['${headers[1]}'], alpha=0.2, color='${currentPalette.getColor(0)}')\n`;
-            break;
-            
-        case 'pie':
-            code += '# Create pie chart\n';
-            code += `plt.pie(df['${headers[1]}'], labels=df['${headers[0]}'], colors=colors, autopct='%1.1f%%')\n`;
-            break;
+    if (chartType === 'line' && headers.length === 3) {
+        code += '# Create multiple line plot\n';
+        code += `# Group data by ${headers[2]}\n`;
+        code += `for i, (name, group) in enumerate(df.groupby('${headers[2]}')):\n`;
+        code += `    ax.plot(group['${headers[0]}'], group['${headers[1]}'], `;
+        code += `label=name, color=colors[i % len(colors)], linewidth=2)\n`;
+        code += `    ax.fill_between(group['${headers[0]}'], group['${headers[1]}'], `;
+        code += `alpha=0.2, color=colors[i % len(colors)])\n`;
+        code += '\nplt.legend()\n';
+    } else if (chartType === 'line') {
+        code += '# Create line plot\n';
+        code += `ax.plot(df['${headers[0]}'], df['${headers[1]}'], color='${currentPalette.getColor(0)}', linewidth=2)\n`;
+        code += `ax.fill_between(df['${headers[0]}'], df['${headers[1]}'], alpha=0.2, color='${currentPalette.getColor(0)}')\n`;
     }
     
     // 添加注释
