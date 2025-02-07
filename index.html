@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
 </head>
 <body>
     <header>
@@ -14,7 +15,7 @@
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
+                <li><a href="resources.html">Resources</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -23,51 +24,69 @@
     <main>
         <section id="home">
             <h2>Home</h2>
-            <div class="table-container">
-                <div class="table-controls">
-                    <button id="addColumn">Add Column</button>
-                    <button id="removeColumn">Remove Column</button>
-                    <span class="column-counter">Columns: <span id="columnCount">3</span>/10</span>
+            <div class="container">
+                <div class="paste-container">
+                    <h3>Please select your objective</h3>
+                    <select id="analysisMethod" class="analysis-select">
+                        <optgroup label="User Growth Analysis">
+                            <option value="linear_chart">Linear Chart</option>
+                            <option value="linear_regression">Linear Regression</option>
+                            <option value="funnel_chart">Funnel Chart</option>
+                            <option value="distribution_heatmap">Distribution Heatmap</option>
+                            <option value="ab_test">A/B Test</option>
+                        </optgroup>
+                        <optgroup label="User Retention Analysis">
+                            <option value="kaplan_meier">Kaplan-Meier Estimator</option>
+                            <option value="cohort_analysis">Cohort Analysis</option>
+                            <option value="churn_prediction">Churn Prediction Models</option>
+                            <option value="time_series">Time-Series Models</option>
+                            <option value="rfm_model">RFM Model</option>
+                        </optgroup>
+                        <optgroup label="User Behavior Analysis">
+                            <option value="sankey_diagram">Sankey Diagram</option>
+                            <option value="markov_chain">Markov Chain Model</option>
+                            <option value="hmm">Hidden Markov Model (HMM)</option>
+                            <option value="bayesian_networks">Bayesian Networks</option>
+                            <option value="association_rule">Association Rule Mining</option>
+                            <option value="heatmap_analysis">Heatmap Analysis</option>
+                        </optgroup>
+                        <optgroup label="Survival Analysis">
+                            <option value="nps">Net Promoter Score (NPS)</option>
+                            <option value="csat">Customer Satisfaction Score (CSAT)</option>
+                            <option value="ces">Customer Effort Score (CES)</option>
+                            <option value="sentiment_analysis">Sentiment Analysis</option>
+                            <option value="feature_value">Feature Value Analysis</option>
+                            <option value="chi_square">Chi-Square Test</option>
+                            <option value="correlation">Correlation Analysis</option>
+                            <option value="anova">ANOVA/T-Test</option>
+                        </optgroup>
+                    </select>
+                    <textarea id="pasteArea" placeholder="Paste your data here..."></textarea>
+                    <button id="processData" class="process-btn">
+                        <i class="fas fa-sync"></i>
+                        Process Data
+                    </button>
                 </div>
-                <div class="table-info">
-                    <p>Double click on any cell to edit. Press Enter to save, Esc to cancel.</p>
+                <div class="table-container">
+                    <div class="table-controls">
+                        <button id="addColumn">Add Column</button>
+                        <button id="removeColumn">Remove Column</button>
+                        <span class="column-counter">Columns: <span id="columnCount">3</span>/10</span>
+                    </div>
+                    <div class="table-info">
+                        <p>Processed data will be displayed below</p>
+                    </div>
+                    <table id="dataTable">
+                        <thead>
+                            <tr>
+                                <!-- 表头将由 JavaScript 动态生成 -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- 表格内容将由 JavaScript 动态生成 -->
+                        </tbody>
+                    </table>
                 </div>
-                <table id="dataTable">
-                    <thead>
-                        <tr>
-                            <th class="editable" title="Double click to edit">Column 1</th>
-                            <th class="editable" title="Double click to edit">Column 2</th>
-                            <th class="editable" title="Double click to edit">Column 3</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
             <div class="chart-controls">
                 <button id="recommendChart" class="chart-btn">
@@ -78,17 +97,29 @@
                     <i class="fas fa-chart-bar"></i>
                     Pick a Chart
                 </button>
+                <button id="pickPalette" class="chart-btn">
+                    <i class="fas fa-palette"></i>
+                    Color Theme
+                </button>
+                <button id="addAnnotation" class="chart-btn">
+                    <i class="fas fa-comment-alt"></i>
+                    Add Annotation
+                </button>
             </div>
             <div id="chartArea" class="chart-area" style="display: none;">
                 <h3 id="chartTitle" class="chart-title"></h3>
                 <div id="chartContainer">
                     <canvas id="myChart"></canvas>
                 </div>
-                <div id="pythonCode" class="python-code">
+                <div id="pythonCode" class="python-code" style="display: none;">
                     <div class="code-header">
-                        <h4>Python Code:</h4>
-                        <button id="copyCode" class="copy-btn">
-                            <i class="fas fa-copy"></i> Copy Code
+                        <button id="generateCode" class="generate-btn">
+                            <i class="fas fa-code"></i>
+                            Generate Code
+                        </button>
+                        <button id="copyCode" class="copy-btn" style="display: none;">
+                            <i class="fas fa-copy"></i>
+                            Copy Code
                         </button>
                     </div>
                     <pre><code id="codeBlock"></code></pre>
