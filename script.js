@@ -219,16 +219,39 @@ document.getElementById('processData').addEventListener('click', function() {
 // Analysis method change
 document.getElementById('analysisMethod').addEventListener('change', function(e) {
     const pasteArea = document.getElementById('pasteArea');
+    const chartArea = document.getElementById('chartArea');
+    const pythonCode = document.getElementById('pythonCode');
+    const codeBlock = document.getElementById('codeBlock');
+    const copyBtn = document.getElementById('copyCode');
+    
+    // 清空图表和代码
+    if (currentChart) {
+        currentChart.destroy();
+        currentChart = null;
+    }
+    chartArea.style.display = 'none';
+    pythonCode.style.display = 'none';
+    codeBlock.textContent = '';
+    copyBtn.style.display = 'none';
+    
+    // 清空数据表格
+    const table = document.getElementById('dataTable');
+    table.querySelector('thead tr').innerHTML = '<th>Column 1</th><th>Column 2</th><th>Column 3</th>';
+    table.querySelector('tbody').innerHTML = '<tr><td> </td><td> </td><td> </td></tr>';
+    updateButtonStates();
+    
+    // 清空粘贴区域
+    pasteArea.value = '';
     
     // 根据选择的分析方法更新提示文本
     switch(e.target.value) {
         case 'linear_chart':
             pasteArea.placeholder = 
 `Please paste your user growth data in the following format:
-Date        Users
-2024-01     1000
-2024-02     1200
-2024-03     1500
+Date        Users       Category(Optional)
+2024-01     1000       Group A
+2024-02     1200       Group A
+2024-03     1500       Group B
 ...`;
             break;
         case 'linear_regression':
