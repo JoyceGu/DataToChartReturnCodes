@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Analysis - DataToChart</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .example-chart {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .chart-thumbnail {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .code-example {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .section-divider {
+            margin: 40px 0;
+            border-top: 1px solid #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Survey Analysis</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../resources.html">Resources</a></li>
+                <li><a href="../index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="topic-introduction">
+            <h2>Understanding Survey Analysis</h2>
+            <p>Survey analysis involves collecting, processing, and interpreting feedback directly from users to measure satisfaction, identify pain points, and gather insights for product improvements. This analysis translates qualitative opinions into quantifiable metrics and actionable insights.</p>
+            
+            <div class="key-concepts">
+                <h3>Key Metrics</h3>
+                <ul>
+                    <li><strong>Net Promoter Score (NPS)</strong> - Measures customer loyalty and likelihood to recommend</li>
+                    <li><strong>Customer Satisfaction Score (CSAT)</strong> - Measures satisfaction with specific interactions or features</li>
+                    <li><strong>Customer Effort Score (CES)</strong> - Measures the ease of completing tasks or using features</li>
+                    <li><strong>Response Rate</strong> - Percentage of users who complete the survey</li>
+                    <li><strong>Sentiment Score</strong> - Quantitative measure of positive, neutral, or negative sentiment in text responses</li>
+                    <li><strong>Feature Satisfaction Index</strong> - Composite score measuring satisfaction across multiple features</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="visualization-methods">
+            <h2>Visualization Methods</h2>
+            
+            <div class="method-card">
+                <h3>NPS Distribution Analysis</h3>
+                <p>NPS distribution charts visualize the breakdown of promoters, passives, and detractors, helping track changes in customer loyalty over time.</p>
+                
+                <div class="example-chart">
+                    <h4>Example Dataset</h4>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User ID</th>
+                                <th>NPS Score</th>
+                                <th>Category</th>
+                                <th>Comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1001</td>
+                                <td>10</td>
+                                <td>Promoter</td>
+                                <td>Love the product, use it daily!</td>
+                            </tr>
+                            <tr>
+                                <td>1002</td>
+                                <td>9</td>
+                                <td>Promoter</td>
+                                <td>Great service and support.</td>
+                            </tr>
+                            <tr>
+                                <td>1003</td>
+                                <td>8</td>
+                                <td>Passive</td>
+                                <td>Good, but missing some key features.</td>
+                            </tr>
+                            <tr>
+                                <td>1004</td>
+                                <td>7</td>
+                                <td>Passive</td>
+                                <td>Satisfactory, but could improve UI.</td>
+                            </tr>
+                            <tr>
+                                <td>1005</td>
+                                <td>5</td>
+                                <td>Detractor</td>
+                                <td>Too many bugs, frustrating experience.</td>
+                            </tr>
+                            <tr>
+                                <td>1006</td>
+                                <td>3</td>
+                                <td>Detractor</td>
+                                <td>Customer service is very poor.</td>
+                            </tr>
+                            <tr>
+                                <td>1007</td>
+                                <td>10</td>
+                                <td>Promoter</td>
+                                <td>Exactly what I needed!</td>
+                            </tr>
+                            <tr>
+                                <td>1008</td>
+                                <td>6</td>
+                                <td>Detractor</td>
+                                <td>Too expensive for what it offers.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>This table shows NPS survey responses with scores and feedback comments.</p>
+                </div>
+                
+                <div class="code-example">
+                    <h4>Python Code Example</h4>
+                    <pre><code>
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+
+# Create DataFrame directly
+df = pd.DataFrame({
+    'user_id': [1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008],
+    'nps_score': [10, 9, 8, 7, 5, 3, 10, 6],
+    'category': ['Promoter', 'Promoter', 'Passive', 'Passive', 
+                'Detractor', 'Detractor', 'Promoter', 'Detractor'],
+    'comment': ['Love the product, use it daily!', 'Great service and support.',
+               'Good, but missing some key features.', 'Satisfactory, but could improve UI.',
+               'Too many bugs, frustrating experience.', 'Customer service is very poor.',
+               'Exactly what I needed!', 'Too expensive for what it offers.']
+})
+
+# Calculate NPS segments from the DataFrame
+segment_counts = df['category'].value_counts()
+total = len(df)
+promoters_pct = (segment_counts.get('Promoter', 0) / total) * 100
+passives_pct = (segment_counts.get('Passive', 0) / total) * 100
+detractors_pct = (segment_counts.get('Detractor', 0) / total) * 100
+
+# Calculate NPS score
+nps_score = promoters_pct - detractors_pct
+
+# Create the visualization
+categories = ['Detractors', 'Passives', 'Promoters']
+values = [detractors_pct, passives_pct, promoters_pct]
+colors = ['#FF6B6B', '#FFD166', '#06D6A0']
+
+plt.figure(figsize=(10, 6))
+bars = plt.bar(categories, values, color=colors)
+
+# Add data labels
+for bar in bars:
+    height = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width()/2., height + 1,
+            f'{height:.1f}%', ha='center', va='bottom')
+
+plt.title(f'Net Promoter Score Distribution (NPS: {nps_score:.1f})', fontsize=16)
+plt.ylabel('Percentage of Respondents')
+plt.ylim(0, 100)
+plt.tight_layout()
+plt.show()
+                    </code></pre>
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <h3>Sentiment Analysis Visualization</h3>
+                <p>Sentiment analysis visualizations show the distribution of positive, neutral, and negative sentiments in open-ended survey responses.</p>
+                
+                <div class="example-chart">
+                    <h4>Example</h4>
+                    <img src="../images/examples/sentiment-analysis.png" alt="Sentiment Analysis Example" class="chart-thumbnail">
+                    <p>This chart shows sentiment analysis results from open-ended feedback about different product features.</p>
+                </div>
+                
+                <div class="code-example">
+                    <h4>Python Code Example</h4>
+                    <pre><code>
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from nltk.sentiment import SentimentIntensityAnalyzer
+
+# Initialize sentiment analyzer
+sia = SentimentIntensityAnalyzer()
+
+# Sample data - feature feedback
+features = ['User Interface', 'Performance', 'Reliability', 'Customer Support', 'Documentation']
+comments = [
+    "The interface is clean but lacks customization options.",
+    "Performance is excellent, very responsive and quick.",
+    "Sometimes crashes when handling large files.",
+    "Support team is incredibly helpful and responsive.",
+    "Documentation is comprehensive but could use more examples."
+]
+
+# Analyze sentiment
+sentiments = []
+for comment in comments:
+    score = sia.polarity_scores(comment)
+    sentiments.append((score['pos'], score['neu'], score['neg']))
+
+# Convert to DataFrame
+df = pd.DataFrame(sentiments, index=features, columns=['Positive', 'Neutral', 'Negative'])
+
+# Create stacked bar chart
+ax = df.plot(kind='barh', stacked=True, figsize=(10, 6), 
+            color=['#4CAF50', '#FFC107', '#F44336'])
+
+# Add annotations
+for i, feature in enumerate(features):
+    pos_width = df.loc[feature, 'Positive']
+    neu_width = df.loc[feature, 'Neutral']
+    neg_width = df.loc[feature, 'Negative']
+    
+    # Only add text if segment is wide enough
+    if pos_width > 0.1:
+        ax.text(pos_width/2, i, f"{pos_width:.2f}", va='center', ha='center', color='white')
+    if neu_width > 0.1:
+        ax.text(pos_width + neu_width/2, i, f"{neu_width:.2f}", va='center', ha='center')
+    if neg_width > 0.1:
+        ax.text(pos_width + neu_width + neg_width/2, i, f"{neg_width:.2f}", va='center', ha='center', color='white')
+
+plt.title('Sentiment Analysis by Feature', fontsize=16)
+plt.xlabel('Sentiment Score')
+plt.tight_layout()
+plt.show()
+                    </code></pre>
+                </div>
+            </div>
+            
+            <!-- More visualization methods -->
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="case-studies">
+            <h2>Case Studies</h2>
+            
+            <div class="case-study">
+                <h3>Product Feature Prioritization</h3>
+                <p><strong>Problem:</strong> A software company needed to decide which features to prioritize in their next development cycle.</p>
+                <p><strong>Analysis:</strong> Feature satisfaction survey responses were analyzed alongside feature usage data to create a quadrant analysis of importance vs. satisfaction.</p>
+                <p><strong>Solution:</strong> Features with high importance but low satisfaction scores were prioritized for improvement, while new features were developed based on customer suggestions with high frequency.</p>
+                <p><strong>Result:</strong> After implementing the prioritized improvements, overall product satisfaction increased by 22% and customer renewal rates improved by 15%.</p>
+            </div>
+            
+            <!-- More case studies -->
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="further-resources">
+            <h2>Further Resources</h2>
+            <ul>
+                <li><a href="https://www.example.com/survey-design">Effective Survey Design Principles</a> - Guide to creating surveys that generate actionable insights</li>
+                <li><a href="https://www.example.com/sentiment-analysis">Text Analytics for Survey Data</a> - Advanced techniques for analyzing open-ended responses</li>
+                <li><a href="https://www.example.com/survey-statistics">Statistical Methods for Survey Analysis</a> - How to apply statistical rigor to survey data</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 DataToChart. All rights reserved.</p>
+    </footer>
+</body>
+</html> 

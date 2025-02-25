@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Retention Analysis - DataToChart</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .example-chart {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .chart-thumbnail {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .code-example {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .section-divider {
+            margin: 40px 0;
+            border-top: 1px solid #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Retention Analysis</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../resources.html">Resources</a></li>
+                <li><a href="../index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="topic-introduction">
+            <h2>Understanding User Retention Analysis</h2>
+            <p>User retention analysis measures how well a product or service maintains its user base over time. It helps businesses understand which factors keep users engaged, identify patterns of disengagement, and develop strategies to reduce churn and increase lifetime value.</p>
+            
+            <div class="key-concepts">
+                <h3>Key Metrics</h3>
+                <ul>
+                    <li><strong>Retention Rate</strong> - Percentage of users who continue using the product after a specific period</li>
+                    <li><strong>Churn Rate</strong> - Percentage of users who stop using the product during a specific period</li>
+                    <li><strong>Customer Lifetime Value (CLV)</strong> - The total revenue a business can expect from a customer during their relationship</li>
+                    <li><strong>N-day Retention</strong> - Percentage of users who return on the Nth day after their first use</li>
+                    <li><strong>Stickiness</strong> - Ratio of daily active users to monthly active users (DAU/MAU)</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="visualization-methods">
+            <h2>Visualization Methods</h2>
+            
+            <div class="method-card">
+                <h3>Cohort Retention Heatmap</h3>
+                <p>Cohort retention heatmaps show how different user groups (cohorts) retain over time, allowing for the visualization of retention patterns across acquisition periods.</p>
+                
+                <div class="example-chart">
+                    <h4>Example Dataset</h4>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Cohort</th>
+                                <th>Month 1</th>
+                                <th>Month 2</th>
+                                <th>Month 3</th>
+                                <th>Month 4</th>
+                                <th>Month 5</th>
+                                <th>Month 6</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Jan</td>
+                                <td>100</td>
+                                <td>60</td>
+                                <td>40</td>
+                                <td>30</td>
+                                <td>28</td>
+                                <td>25</td>
+                            </tr>
+                            <tr>
+                                <td>Feb</td>
+                                <td>100</td>
+                                <td>65</td>
+                                <td>42</td>
+                                <td>35</td>
+                                <td>30</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Mar</td>
+                                <td>100</td>
+                                <td>62</td>
+                                <td>41</td>
+                                <td>32</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Apr</td>
+                                <td>100</td>
+                                <td>68</td>
+                                <td>45</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>May</td>
+                                <td>100</td>
+                                <td>70</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>Jun</td>
+                                <td>100</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>This table shows monthly retention rates (%) for user cohorts acquired over a 6-month period.</p>
+                </div>
+                
+                <div class="code-example">
+                    <h4>Python Code Example</h4>
+                    <pre><code>
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Create the DataFrame directly
+df = pd.DataFrame({
+    'Month 1': [100, 100, 100, 100, 100, 100],
+    'Month 2': [60, 65, 62, 68, 70, 0],
+    'Month 3': [40, 42, 41, 45, 0, 0],
+    'Month 4': [30, 35, 32, 0, 0, 0],
+    'Month 5': [28, 30, 0, 0, 0, 0],
+    'Month 6': [25, 0, 0, 0, 0, 0]
+}, index=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'])
+
+# Create heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(df, annot=True, cmap="YlGnBu", fmt='g')
+plt.title('User Retention by Cohort (%)', fontsize=16)
+plt.xlabel('Months Since Acquisition')
+plt.ylabel('Acquisition Cohort')
+plt.tight_layout()
+plt.show()
+                    </code></pre>
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <h3>Survival Curve Analysis (Kaplan-Meier Estimator)</h3>
+                <p>Survival curves visualize the probability of users remaining active over time, accounting for users who haven't yet churned.</p>
+                
+                <div class="example-chart">
+                    <h4>Example</h4>
+                    <img src="../images/examples/survival-curve.png" alt="Survival Curve Example" class="chart-thumbnail">
+                    <p>This survival curve shows the probability of user retention over a 12-month period, with confidence intervals to indicate uncertainty.</p>
+                </div>
+                
+                <div class="code-example">
+                    <h4>Python Code Example</h4>
+                    <pre><code>
+import pandas as pd
+from lifelines import KaplanMeierFitter
+import matplotlib.pyplot as plt
+
+# Sample data
+data = {
+    'duration': [1, 3, 5, 7, 9, 11, 15, 20, 25, 30, 40, 50],
+    'event_observed': [1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0]  # 1 = churn, 0 = still active
+}
+
+df = pd.DataFrame(data)
+
+# Fit the Kaplan-Meier model
+kmf = KaplanMeierFitter()
+kmf.fit(df['duration'], df['event_observed'], label='User Retention')
+
+# Plot the survival curve
+plt.figure(figsize=(10, 6))
+kmf.plot_survival_function(ci_show=True)
+
+plt.title('User Retention Survival Curve', fontsize=16)
+plt.xlabel('Days Since Acquisition')
+plt.ylabel('Survival Probability')
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+                    </code></pre>
+                </div>
+            </div>
+            
+            <!-- More visualization methods -->
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="case-studies">
+            <h2>Case Studies</h2>
+            
+            <div class="case-study">
+                <h3>SaaS Platform Retention Optimization</h3>
+                <p><strong>Problem:</strong> A B2B SaaS company was experiencing high churn rates in the second month after customer onboarding.</p>
+                <p><strong>Analysis:</strong> Cohort analysis revealed that users who didn't use specific advanced features during their first 30 days were 3x more likely to churn in month 2.</p>
+                <p><strong>Solution:</strong> The company redesigned their onboarding process to include guided feature tours and implemented an email sequence highlighting advanced features before the 30-day mark.</p>
+                <p><strong>Result:</strong> 60-day retention improved by 25%, and annual customer lifetime value increased by 30%.</p>
+            </div>
+            
+            <!-- More case studies -->
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="further-resources">
+            <h2>Further Resources</h2>
+            <ul>
+                <li><a href="https://www.example.com/retention-metrics">Complete Guide to Retention Metrics</a> - In-depth exploration of retention measurement methodologies</li>
+                <li><a href="https://www.example.com/cohort-analysis-guide">Advanced Cohort Analysis Techniques</a> - How to use cohort analysis to gain deeper retention insights</li>
+                <li><a href="https://www.example.com/churn-prediction">Implementing Churn Prediction Models</a> - Technical guide to building predictive churn models</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 DataToChart. All rights reserved.</p>
+    </footer>
+</body>
+</html> 

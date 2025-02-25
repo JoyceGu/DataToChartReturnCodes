@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Behavior Analysis - DataToChart</title>
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .example-chart {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+        }
+        
+        .chart-thumbnail {
+            width: 100%;
+            max-width: 400px;
+            display: block;
+            margin: 0 auto;
+        }
+        
+        .code-example {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        
+        .section-divider {
+            margin: 40px 0;
+            border-top: 1px solid #eaeaea;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>User Behavior Analysis</h1>
+        <nav>
+            <ul>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../resources.html">Resources</a></li>
+                <li><a href="../index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="topic-introduction">
+            <h2>Understanding User Behavior Analysis</h2>
+            <p>User behavior analysis examines how users interact with a product or service, including their navigation patterns, feature usage, and engagement frequency. This analysis helps identify behavioral trends, optimize user experience, and predict future actions.</p>
+            
+            <div class="key-concepts">
+                <h3>Key Metrics</h3>
+                <ul>
+                    <li><strong>Session Duration</strong> - Length of time users spend during a single engagement with the product</li>
+                    <li><strong>Interaction Frequency</strong> - How often users perform specific actions</li>
+                    <li><strong>Feature Adoption Rate</strong> - Percentage of users who utilize specific features</li>
+                    <li><strong>Navigation Paths</strong> - Sequences of pages or screens users visit</li>
+                    <li><strong>Drop-off Points</strong> - Locations where users abandon a process or workflow</li>
+                    <li><strong>Behavioral Segments</strong> - Groups of users with similar interaction patterns</li>
+                </ul>
+            </div>
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="visualization-methods">
+            <h2>Visualization Methods</h2>
+            
+            <div class="method-card">
+                <h3>Sankey Diagrams for User Flows</h3>
+                <p>Sankey diagrams visualize user navigation paths through a product, showing the volume of users following each path and where drop-offs occur.</p>
+                
+                <div class="example-chart">
+                    <h4>Example Dataset</h4>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Source</th>
+                                <th>Target</th>
+                                <th>Users</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Homepage</td>
+                                <td>Category Page</td>
+                                <td>8000</td>
+                                <td>Users navigating from homepage to category</td>
+                            </tr>
+                            <tr>
+                                <td>Homepage</td>
+                                <td>Search Results</td>
+                                <td>2000</td>
+                                <td>Users searching directly from homepage</td>
+                            </tr>
+                            <tr>
+                                <td>Category Page</td>
+                                <td>Product Page</td>
+                                <td>3000</td>
+                                <td>Users selecting products from categories</td>
+                            </tr>
+                            <tr>
+                                <td>Category Page</td>
+                                <td>Exit</td>
+                                <td>5000</td>
+                                <td>Users leaving from category page</td>
+                            </tr>
+                            <tr>
+                                <td>Search Results</td>
+                                <td>Cart</td>
+                                <td>1000</td>
+                                <td>Users adding to cart from search</td>
+                            </tr>
+                            <tr>
+                                <td>Search Results</td>
+                                <td>Checkout</td>
+                                <td>1000</td>
+                                <td>Users going directly to checkout</td>
+                            </tr>
+                            <tr>
+                                <td>Product Page</td>
+                                <td>Purchase</td>
+                                <td>3000</td>
+                                <td>Users purchasing from product page</td>
+                            </tr>
+                            <tr>
+                                <td>Cart</td>
+                                <td>Purchase</td>
+                                <td>1000</td>
+                                <td>Users completing purchase from cart</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>This table shows user navigation flows through an e-commerce website.</p>
+                </div>
+                
+                <div class="code-example">
+                    <h4>Python Code Example</h4>
+                    <pre><code>
+import plotly.graph_objects as go
+import pandas as pd
+
+# Create DataFrame directly
+df = pd.DataFrame({
+    'source': ['Homepage', 'Homepage', 'Category Page', 'Category Page', 
+              'Search Results', 'Search Results', 'Product Page', 'Cart'],
+    'target': ['Category Page', 'Search Results', 'Product Page', 'Exit', 
+              'Cart', 'Checkout', 'Purchase', 'Purchase'],
+    'value': [8000, 2000, 3000, 5000, 1000, 1000, 3000, 1000],
+    'description': ['Users navigating from homepage to category', 'Users searching directly from homepage',
+                   'Users selecting products from categories', 'Users leaving from category page',
+                   'Users adding to cart from search', 'Users going directly to checkout',
+                   'Users purchasing from product page', 'Users completing purchase from cart']
+})
+
+# Get unique pages for node labels
+all_pages = list(set(df['source'].tolist() + df['target'].tolist()))
+mapping = {page: i for i, page in enumerate(all_pages)}
+
+# Map source and target to node indices
+source_indices = [mapping[src] for src in df['source']]
+target_indices = [mapping[tgt] for tgt in df['target']]
+
+# Create Sankey diagram
+fig = go.Figure(data=[go.Sankey(
+    node = dict(
+        pad = 15,
+        thickness = 20,
+        line = dict(color = "black", width = 0.5),
+        label = all_pages,
+        color = "blue"
+    ),
+    link = dict(
+        source = source_indices,
+        target = target_indices,
+        value = df['value']
+    ))])
+
+fig.update_layout(
+    title_text="User Navigation Flow",
+    font_size=12,
+    width=800,
+    height=500
+)
+
+fig.show()
+                    </code></pre>
+                </div>
+            </div>
+            
+            <div class="method-card">
+                <h3>Heatmaps for User Interaction</h3>
+                <p>Heatmaps visualize where users click, tap, or focus their attention on a page or screen, helping identify high and low engagement areas.</p>
+                
+                <div class="example-chart">
+                    <h4>Example</h4>
+                    <img src="../images/examples/click-heatmap.png" alt="Click Heatmap Example" class="chart-thumbnail">
+                    <p>This heatmap shows user click density on a webpage, with warmer colors indicating higher click frequency.</p>
+                </div>
+                
+                <div class="code-example">
+                    <h4>Python Code Example</h4>
+                    <pre><code>
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Sample data - simulated click coordinates on a 1000x800 webpage
+np.random.seed(42)
+x = np.random.normal(500, 150, 1000)
+y = np.random.normal(400, 100, 1000)
+
+# Additional cluster around a button location
+x = np.append(x, np.random.normal(700, 30, 200))
+y = np.append(y, np.random.normal(300, 20, 200))
+
+# Create the heatmap
+plt.figure(figsize=(10, 8))
+plt.hist2d(x, y, bins=50, cmap='hot')
+plt.colorbar(label='Click Frequency')
+
+# Simulation of a webpage layout
+plt.xlim(0, 1000)
+plt.ylim(0, 800)
+plt.gca().invert_yaxis()  # Invert Y-axis to match webpage coordinates
+
+plt.title('User Click Heatmap', fontsize=16)
+plt.xlabel('X Position')
+plt.ylabel('Y Position')
+plt.tight_layout()
+plt.show()
+                    </code></pre>
+                </div>
+            </div>
+            
+            <!-- More visualization methods -->
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="case-studies">
+            <h2>Case Studies</h2>
+            
+            <div class="case-study">
+                <h3>Mobile App Navigation Optimization</h3>
+                <p><strong>Problem:</strong> A mobile banking app had low feature discovery rates, with most users only accessing basic account information.</p>
+                <p><strong>Analysis:</strong> User path analysis revealed that advanced features were buried too deep in the navigation structure, requiring 4+ taps to access.</p>
+                <p><strong>Solution:</strong> The team redesigned the app's information architecture and implemented a personalized feature recommendation system based on user behavior.</p>
+                <p><strong>Result:</strong> Advanced feature usage increased by 65%, and overall user engagement time improved by 40%.</p>
+            </div>
+            
+            <!-- More case studies -->
+        </section>
+        
+        <div class="section-divider"></div>
+        
+        <section class="further-resources">
+            <h2>Further Resources</h2>
+            <ul>
+                <li><a href="https://www.example.com/behavioral-analytics">Behavioral Analytics Fundamentals</a> - Comprehensive guide to behavior analysis methodologies</li>
+                <li><a href="https://www.example.com/user-segmentation">Behavioral Segmentation Techniques</a> - Advanced approaches to grouping users by behavior</li>
+                <li><a href="https://www.example.com/markov-models">Markov Models for User Behavior</a> - Technical implementation guide for predictive behavior modeling</li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 DataToChart. All rights reserved.</p>
+    </footer>
+</body>
+</html> 
